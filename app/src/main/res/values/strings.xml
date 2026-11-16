@@ -1,3 +1,95 @@
 <resources>
-    <string name="app_name">UAS</string>
+    <string name="app_name">AutoFix Center</string>
+
+    <string name="app_tagline">Layanan Montir &amp; Derek Darurat 24 Jam</string>
+    <string name="badge_24_jam">Siaga 24 Jam</string>
+    <string name="status_bengkel_buka">• Buka</string>
+    <string name="subtitle_bengkel_resmi">AutoFix Center Siaga 24 Jam</string>
+
+    <!-- Autentikasi (Login & Register) -->
+    <string name="title_login">Masuk Akun Pelanggan</string>
+    <string name="title_register">Daftar Akun Baru</string>
+    <string name="hint_nama_lengkap">Nama Lengkap</string>
+    <string name="hint_email">Email Pelanggan</string>
+    <string name="hint_nomor_wa">Nomor WhatsApp</string>
+    <string name="hint_password">Kata Sandi</string>
+    <string name="hint_password_baru">Kata Sandi Baru (Kosongkan jika tidak diubah)</string>
+    <string name="btn_login">Masuk Sekarang</string>
+    <string name="btn_register">Buat Akun</string>
+    <string name="prompt_belum_punya_akun">Belum punya akun? Daftar</string>
+    <string name="prompt_sudah_punya_akun">Sudah punya akun? Masuk</string>
+    <string name="error_field_kosong">Kolom ini tidak boleh kosong</string>
+    <string name="error_email_tidak_valid">Format alamat email tidak valid</string>
+    <string name="error_password_pendek">Kata sandi minimal harus 6 karakter</string>
+    <string name="error_login_gagal">Email atau kata sandi tidak sesuai</string>
+
+    <!-- Navigasi Bawah -->
+    <string name="nav_beranda">Beranda</string>
+    <string name="nav_riwayat">Riwayat</string>
+    <string name="nav_profil">Profil</string>
+
+    <!-- Beranda -->
+    <string name="greeting_user">Halo, %1$s</string>
+    <string name="hero_title_mogok">Mobil Mogok di Jalan?</string>
+    <string name="hero_subtitle_mogok">Panggil montir kami ke titik lokasi Anda atau pesan evakuasi derek ke bengkel</string>
+    <string name="btn_buat_panggilan_sos">+ Buat Panggilan Darurat</string>
+    <string name="info_servis_lokasi">Servis Ringan di Lokasi • Rp 150.000</string>
+    <string name="info_derek_bengkel">Evakuasi Derek Bengkel • Rp 350.000</string>
+
+    <!-- Riwayat Panggilan -->
+    <string name="title_riwayat_saya">Riwayat Panggilan Saya</string>
+    <string name="hint_search_order">Cari plat nomor, mobil, atau keluhan…</string>
+    <string name="chip_semua">Semua</string>
+    <string name="chip_servis_lokasi">Servis Lokasi</string>
+    <string name="chip_derek_bengkel">Derek ke Bengkel</string>
+    <string name="empty_title_riwayat">Belum Ada Panggilan Darurat</string>
+    <string name="empty_subtitle_riwayat">Tekan tombol SOS di menu Beranda jika mobil Anda mengalami kendala di jalan.</string>
+
+    <!-- Profil Pelanggan -->
+    <string name="title_profil_pelanggan">Profil Pelanggan</string>
+    <string name="action_ubah_foto">Ubah Foto Profil</string>
+    <string name="btn_simpan_perubahan">Simpan Perubahan</string>
+    <string name="btn_keluar_akun">Keluar dari Akun</string>
+    <string name="btn_hapus_akun">Hapus Akun Permanen</string>
+    <string name="msg_profil_diperbarui">Data profil berhasil diperbarui</string>
+    <string name="dialog_pilih_foto_title">Pilih Sumber Foto</string>
+    <string name="opsi_kamera">Ambil dari Kamera</string>
+    <string name="opsi_galeri">Pilih dari Galeri</string>
+    <string name="opsi_foto_default">Pakai Foto Default</string>
+    <string name="dialog_logout_title">Keluar dari Akun?</string>
+    <string name="dialog_logout_msg">Anda perlu masuk kembali untuk melihat riwayat panggilan darurat Anda.</string>
+    <string name="dialog_hapus_akun_title">Hapus Akun Permanen?</string>
+    <string name="dialog_hapus_akun_msg">Apakah Anda yakin ingin menghapus akun beserta seluruh riwayat panggilan darurat secara permanen?</string>
+
+    <!-- Form & Detail Panggilan -->
+    <string name="title_buat_panggilan">Buat Panggilan Darurat</string>
+    <string name="title_edit_panggilan">Edit Panggilan Darurat</string>
+    <string name="label_tipe_mobil">Tipe Mobil</string>
+    <string name="hint_tipe_mobil">Contoh: Toyota Avanza 2021</string>
+    <string name="label_plat_nomor">Plat Nomor</string>
+    <string name="hint_plat_nomor">Contoh: BL 1234 AA</string>
+    <string name="label_kategori_masalah">Kategori Masalah</string>
+    <string name="label_jenis_penanganan">Pilih Jenis Penanganan</string>
+    <string name="opsi_servis_lokasi_harga">Servis di Lokasi\n• Rp 150.000</string>
+    <string name="opsi_derek_bengkel_harga">Derek ke Bengkel\n• Rp 350.000</string>
+    <string name="label_deskripsi_keluhan">Deskripsi Keluhan</string>
+    <string name="hint_deskripsi_keluhan">Jelaskan kondisi mobil yang mogok…</string>
+    <string name="label_titik_lokasi">Titik Lokasi Mogok</string>
+    <string name="hint_lokasi_manual">Klik Ambil GPS atau ketik patokan lokasi…</string>
+    <string name="btn_ambil_gps">Ambil GPS</string>
+    <string name="label_tambah_foto">Tambah Foto Kondisi Mobil\n(Kamera / Galeri)</string>
+    <string name="btn_ubah_foto">Ubah Foto</string>
+    <string name="btn_kirim_panggilan">Kirim Panggilan Darurat</string>
+    <string name="title_detail_panggilan">Detail Panggilan Darurat</string>
+    <string name="label_estimasi_biaya">Estimasi Biaya</string>
+    <string name="label_status_penanganan">Status</string>
+    <string name="label_tanggal_panggilan">Tanggal</string>
+    <string name="btn_buka_peta">Buka Peta</string>
+    <string name="btn_edit_data">Edit Data</string>
+    <string name="btn_hapus_data">Hapus</string>
+    <string name="btn_hubungi_wa">Hubungi Montir via WhatsApp</string>
+    <string name="dialog_hapus_order_title">Hapus Panggilan Darurat?</string>
+    <string name="dialog_hapus_order_msg">Apakah Anda yakin ingin menghapus data panggilan %1$s (%2$s)? Data tidak dapat dikembalikan.</string>
+    <string name="btn_batal">Batal</string>
+    <string name="btn_ya_hapus">Ya, Hapus</string>
 </resources>
