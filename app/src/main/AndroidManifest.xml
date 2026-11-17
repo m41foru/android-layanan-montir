@@ -56,6 +56,17 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
-    </application>
+        <!-- Layar Utama (Beranda, Riwayat, Profil) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
 
+        <!-- TAMBAHKAN INI: Layar Form Panggilan Darurat -->
+        <activity
+            android:name=".FormOrderActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+    </application>
 </manifest>
