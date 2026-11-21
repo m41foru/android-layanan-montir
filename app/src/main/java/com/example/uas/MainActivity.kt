@@ -58,6 +58,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    // Launcher Izin Notifikasi untuk Android 13+ (agar muncul di panel atas HP)
+    private val requestNotifPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
+
+    private fun askNotificationPermissionIfNeeded() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
     // Launcher Galeri untuk Foto Profil
     private val pickGalleryLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -91,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         setupBerandaButtons()
         setupProfileSection()
         loadUserDataToViews()
+        askNotificationPermissionIfNeeded()
         refreshOrdersList()
     }
 
@@ -151,6 +168,14 @@ class MainActivity : AppCompatActivity() {
         binding.etProfilEmail.setText(currentUser.email)
         binding.etProfilWa.setText(currentUser.whatsapp)
         binding.etProfilPassword.setText("")
+
+        // Buat ikon lonceng menyala biru jika ada notifikasi status baru
+        val bellColor = if (dbHelper.hasUnreadNotification(currentUser.id)) {
+            ContextCompat.getColor(this, R.color.primary_electric_blue)
+        } else {
+            ContextCompat.getColor(this, R.color.text_secondary)
+        }
+        binding.ivBell.setColorFilter(bellColor)
     }
 
     private fun displayAvatarImage(imageView: ImageView, photoUriString: String, defaultPaddingDp: Int) {
@@ -319,11 +344,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         orderAdapter = OrderAdapter(emptyList()) { clickedOrder ->
-            Toast.makeText(
-                this,
-                "Detail: ${clickedOrder.tipeMobil} (${clickedOrder.platNomor})",
-                Toast.LENGTH_SHORT
-            ).show()
+            val intent = Intent(this, DetailOrderActivity::class.java)
+            intent.putExtra(DetailOrderActivity.EXTRA_ORDER, clickedOrder)
+            startActivity(intent)
         }
         binding.rvRiwayatOrders.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -430,6 +453,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, FormOrderActivity::class.java)
             intent.putExtra(FormOrderActivity.EXTRA_PRESELECT_TYPE, "Derek ke Bengkel")
             startActivity(intent)
+        }
+
+        // Klik Ikon Lonceng di Pojok Kanan Atas Beranda
+        binding.ivBell.setOnClickListener {
+            binding.ivBell.setOnClickListener {
+                startActivity(Intent(this, NotificationActivity::class.java))
+            }
         }
     }
 

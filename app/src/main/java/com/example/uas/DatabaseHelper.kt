@@ -323,4 +323,43 @@ class DatabaseHelper(context: Context) :
         cursor.close()
         return list
     }
+
+    // ==================== UPDATE STATUS & RIWAYAT NOTIFIKASI ====================
+
+    fun updateOrderStatus(orderId: Int, newStatus: String): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COL_ORDER_STATUS, newStatus)
+        }
+        return db.update(TABLE_ORDERS, values, "$COL_ORDER_ID = ?", arrayOf(orderId.toString()))
+    }
+
+    fun addNotificationLog(userId: Int, message: String) {
+        val key = "notif_user_$userId"
+        val time = java.text.SimpleDateFormat("HH:mm", java.util.Locale("id", "ID")).format(java.util.Date())
+        val entry = "[$time] $message"
+        val existing = prefs.getString(key, "") ?: ""
+        val updated = if (existing.isEmpty()) entry else "$entry\n---\n$existing"
+        prefs.edit().putString(key, updated).apply()
+        prefs.edit().putBoolean("unread_notif_$userId", true).apply()
+    }
+
+    fun getNotificationLogs(userId: Int): List<String> {
+        val raw = prefs.getString("notif_user_$userId", "") ?: ""
+        if (raw.isBlank()) return emptyList()
+        return raw.split("\n---\n")
+    }
+
+    fun hasUnreadNotification(userId: Int): Boolean {
+        return prefs.getBoolean("unread_notif_$userId", false)
+    }
+
+    fun markNotificationsRead(userId: Int) {
+        prefs.edit().putBoolean("unread_notif_$userId", false).apply()
+    }
+
+    fun clearNotificationLogs(userId: Int) {
+        prefs.edit().remove("notif_user_$userId").apply()
+        prefs.edit().putBoolean("unread_notif_$userId", false).apply()
+    }
 }

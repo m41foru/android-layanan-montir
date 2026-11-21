@@ -2,6 +2,7 @@ package com.example.uas
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Geocoder
@@ -243,29 +244,55 @@ class FormOrderActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun fetchCurrentGpsLocation() {
-        Toast.makeText(this, "Mendeteksi titik koordinat GPS...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Mengambil titik lokasi & membuka Google Maps...", Toast.LENGTH_SHORT).show()
         val fusedClient = LocationServices.getFusedLocationProviderClient(this)
 
         fusedClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
             .addOnSuccessListener { location ->
-                if (location != null) {
-                    val lat = String.format(Locale.US, "%.4f", location.latitude)
-                    val lng = String.format(Locale.US, "%.4f", location.longitude)
-                    val streetName = resolveAddressName(location.latitude, location.longitude)
-                    val formattedLocation = if (streetName.isNotEmpty()) {
-                        "$streetName ($lat, $lng)"
-                    } else {
-                        "Koordinat GPS ($lat, $lng)"
-                    }
-                    binding.etFormLokasi.setText(formattedLocation)
+                val lat = location?.latitude ?: 5.1801
+                val lng = location?.longitude ?: 97.1507
+
+                val latStr = String.format(Locale.US, "%.4f", lat)
+                val lngStr = String.format(Locale.US, "%.4f", lng)
+                val streetName = resolveAddressName(lat, lng)
+
+                val formattedLocation = if (streetName.isNotEmpty()) {
+                    "$streetName ($latStr, $lngStr)"
                 } else {
-                    // Fallback jika GPS emulator belum disetel titik lokasinya
-                    binding.etFormLokasi.setText("Jl. T. Nyak Arief, Lamnyong (5.5712, 95.3581)")
+                    "Titik GPS ($latStr, $lngStr)"
                 }
+
+                // 1. Isi otomatis kolom Titik Lokasi Mogok di Form
+                binding.etFormLokasi.setText(formattedLocation)
+
+                // 2. Langsung buka aplikasi Google Maps ke titik koordinat tersebut
+                openGoogleMapsPin(lat, lng, formattedLocation)
             }
             .addOnFailureListener {
-                binding.etFormLokasi.setText("Jl. T. Nyak Arief, Lamnyong (5.5712, 95.3581)")
+                val defaultLat = 5.1801
+                val defaultLng = 97.1507
+                val fallbackText = "Jl. Medan - Banda Aceh, Lhokseumawe (5.1801, 97.1507)"
+                binding.etFormLokasi.setText(fallbackText)
+                openGoogleMapsPin(defaultLat, defaultLng, fallbackText)
             }
+    }
+
+    private fun openGoogleMapsPin(lat: Double, lng: Double, label: String) {
+        try {
+            val encodedLabel = Uri.encode(label)
+            val gmmIntentUri = Uri.parse("geo:$lat,$lng?q=$lat,$lng($encodedLabel)")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
+                setPackage("com.google.android.apps.maps")
+            }
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                startActivity(mapIntent)
+            } else {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                startActivity(fallbackIntent)
+            }
+        } catch (_: Exception) {
+            Toast.makeText(this, "Titik koordinat berhasil diambil", Toast.LENGTH_SHORT).show()
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -368,14 +395,10 @@ class FormOrderActivity : AppCompatActivity() {
 
         val existing = editingOrder
         if (existing == null) {
-            // Mode CREATE (Tambah Panggilan Darurat Baru)
+            // Mode CREATE: Status awal selalu "Menunggu"
             val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
             val today = dateFormat.format(Date())
-            val statusAwal = if (selectedJenisPenanganan.contains("Derek")) {
-                "Menunggu Mobil Derek"
-            } else {
-                "Montir Menuju Lokasi"
-            }
+            val statusAwal = "Menunggu"
 
             val newOrder = EmergencyOrder(
                 userId = currentUser.id,
@@ -392,14 +415,13 @@ class FormOrderActivity : AppCompatActivity() {
                 tanggalWaktu = today
             )
             dbHelper.insertOrder(newOrder)
-            Toast.makeText(this, "Panggilan darurat berhasil dikirim!", Toast.LENGTH_SHORT).show()
+            dbHelper.addNotificationLog(
+                currentUser.id,
+                "Panggilan baru: $tipeMobil ($platNomor) • Status: Menunggu"
+            )
+            Toast.makeText(this, "Panggilan darurat berhasil dikirim (Status: Menunggu)!", Toast.LENGTH_SHORT).show()
         } else {
             // Mode UPDATE (Edit Panggilan Darurat)
-            val updatedStatus = if (selectedJenisPenanganan.contains("Derek")) {
-                "Diderek ke Bengkel"
-            } else {
-                "Montir Menuju Lokasi"
-            }
             val updatedOrder = existing.copy(
                 tipeMobil = tipeMobil,
                 platNomor = platNomor,
@@ -408,10 +430,13 @@ class FormOrderActivity : AppCompatActivity() {
                 deskripsiKeluhan = deskripsi,
                 lokasiMogok = lokasi,
                 fotoKondisiUri = selectedPhotoUriString,
-                estimasiBiaya = selectedEstimasiBiaya,
-                statusPenanganan = updatedStatus
+                estimasiBiaya = selectedEstimasiBiaya
             )
             dbHelper.updateOrder(updatedOrder)
+            dbHelper.addNotificationLog(
+                currentUser.id,
+                "Data diperbarui: $tipeMobil ($platNomor) • $selectedJenisPenanganan"
+            )
             Toast.makeText(this, "Data panggilan berhasil diperbarui!", Toast.LENGTH_SHORT).show()
         }
 
