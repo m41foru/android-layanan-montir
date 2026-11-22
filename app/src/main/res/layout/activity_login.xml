@@ -19,7 +19,7 @@
             android:layout_marginTop="8dp"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_hero_car"
+            android:src="@drawable/bg_login_tow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
