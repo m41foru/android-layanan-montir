@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Izin Perangkat (Internet, Notifikasi, GPS, Kamera & Galeri) -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -35,7 +36,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UAS">
 
-        <!-- Layar Pembuka: LoginActivity -->
+        <!-- 1. Layar Pembuka: Login -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -46,44 +47,34 @@
             </intent-filter>
         </activity>
 
-        <!-- Layar Daftar Akun -->
+        <!-- 2. Layar Daftar Akun -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- Layar Utama (Beranda, Riwayat, Profil) -->
+        <!-- 3. Layar Utama (Beranda, Riwayat, Profil) -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
-        <!-- Layar Utama (Beranda, Riwayat, Profil) -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
-
-        <!-- TAMBAHKAN INI: Layar Form Panggilan Darurat -->
+        <!-- 4. Layar Form Panggilan Darurat -->
         <activity
             android:name=".FormOrderActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- Layar Form Panggilan Darurat -->
-        <activity
-            android:name=".FormOrderActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
-        <!-- TAMBAHKAN INI: Layar Detail Panggilan Darurat -->
+        <!-- 5. Layar Detail Panggilan Darurat -->
         <activity
             android:name=".DetailOrderActivity"
             android:exported="false" />
 
+        <!-- 6. Layar Notifikasi -->
         <activity
             android:name=".NotificationActivity"
             android:exported="false" />
 
     </application>
+
 </manifest>
