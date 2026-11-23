@@ -33,13 +33,13 @@ class MainActivity : AppCompatActivity() {
     private var selectedProfilePhotoUri: String = ""
 
     // Launcher Kamera untuk Foto Profil
+    // Launcher Kamera untuk Foto Profil
     private val takeProfilePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
             if (bitmap != null) {
                 val savedUri = saveBitmapToInternalStorage(bitmap)
                 if (savedUri != null) {
-                    selectedProfilePhotoUri = savedUri.toString()
-                    displayAvatarImage(binding.ivAvatarProfil, selectedProfilePhotoUri, 20)
+                    applyAndSaveProfilePhoto(savedUri.toString())
                 }
             }
         }
@@ -80,8 +80,7 @@ class MainActivity : AppCompatActivity() {
             if (uri != null) {
                 val savedUri = copyUriToInternalStorage(uri)
                 if (savedUri != null) {
-                    selectedProfilePhotoUri = savedUri.toString()
-                    displayAvatarImage(binding.ivAvatarProfil, selectedProfilePhotoUri, 20)
+                    applyAndSaveProfilePhoto(savedUri.toString())
                 }
             }
         }
@@ -178,15 +177,41 @@ class MainActivity : AppCompatActivity() {
         binding.ivBell.setColorFilter(bellColor)
     }
 
+    private fun applyAndSaveProfilePhoto(newPhotoUri: String) {
+        selectedProfilePhotoUri = newPhotoUri
+        val currentUser = dbHelper.getCurrentUser()
+        if (currentUser != null) {
+            dbHelper.updateUserProfile(
+                userId = currentUser.id,
+                fullName = currentUser.fullName,
+                email = currentUser.email,
+                whatsapp = currentUser.whatsapp,
+                newPassword = null,
+                photoUri = newPhotoUri
+            )
+        }
+        displayAvatarImage(binding.ivAvatarProfil, newPhotoUri, 20)
+        displayAvatarImage(binding.ivUserAvatarMini, newPhotoUri, 9)
+        Toast.makeText(this, "Foto profil berhasil diperbarui", Toast.LENGTH_SHORT).show()
+    }
+
     private fun displayAvatarImage(imageView: ImageView, photoUriString: String, defaultPaddingDp: Int) {
         val density = resources.displayMetrics.density
         if (photoUriString.isNotEmpty()) {
             try {
-                imageView.setPadding(0, 0, 0, 0)
-                imageView.imageTintList = null
-                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                imageView.setImageURI(Uri.parse(photoUriString))
-                return
+                val uri = Uri.parse(photoUriString)
+                val file = uri.path?.let { File(it) }
+                if (file != null && file.exists()) {
+                    val bitmap = android.graphics.BitmapFactory.decodeFile(file.absolutePath)
+                    if (bitmap != null) {
+                        imageView.setPadding(0, 0, 0, 0)
+                        imageView.clearColorFilter()
+                        imageView.imageTintList = null
+                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                        imageView.setImageBitmap(bitmap)
+                        return
+                    }
+                }
             } catch (_: Exception) {
                 // Jika file gagal dimuat, kembali ke gambar default
             }
@@ -260,8 +285,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     1 -> pickGalleryLauncher.launch("image/*")
                     2 -> {
-                        selectedProfilePhotoUri = ""
-                        displayAvatarImage(binding.ivAvatarProfil, "", 20)
+                        applyAndSaveProfilePhoto("")
                     }
                 }
             }

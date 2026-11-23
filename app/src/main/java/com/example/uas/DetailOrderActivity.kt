@@ -27,7 +27,7 @@ class DetailOrderActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_ORDER = "extra_order_detail"
-        private const val WORKSHOP_WHATSAPP = "6281260002400"
+        private const val WORKSHOP_WHATSAPP = "6281262933747"
         private const val CHANNEL_ID = "autofix_status_channel"
     }
 
