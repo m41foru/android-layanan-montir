@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        seedInitialOrdersIfEmpty(currentUser)
 
         setupRecyclerView()
         setupSearchAndFilter()
@@ -114,44 +113,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         loadUserDataToViews()
         refreshOrdersList()
-    }
-
-    private fun seedInitialOrdersIfEmpty(user: UserAccount) {
-        val existing = dbHelper.getOrdersByUser(user.id)
-        if (existing.isEmpty()) {
-            dbHelper.insertOrder(
-                EmergencyOrder(
-                    userId = user.id,
-                    namaPemilik = user.fullName,
-                    tipeMobil = "Toyota Avanza",
-                    platNomor = "BL 1234 AA",
-                    kategoriMasalah = "Mesin Mati Total",
-                    jenisPenanganan = "Derek ke Bengkel",
-                    deskripsiKeluhan = "Mesin tiba-tiba mati total dan keluar asap dari kap depan.",
-                    lokasiMogok = "Jl. T. Nyak Arief",
-                    fotoKondisiUri = "",
-                    estimasiBiaya = 350000,
-                    statusPenanganan = "Montir Menuju Lokasi",
-                    tanggalWaktu = "17 Nov 2026"
-                )
-            )
-            dbHelper.insertOrder(
-                EmergencyOrder(
-                    userId = user.id,
-                    namaPemilik = user.fullName,
-                    tipeMobil = "Honda Brio",
-                    platNomor = "BL 8891 Z",
-                    kategoriMasalah = "Aki Tekor",
-                    jenisPenanganan = "Servis di Lokasi",
-                    deskripsiKeluhan = "Mobil tidak bisa distarter, butuh jumper aki di lokasi.",
-                    lokasiMogok = "Simpang Lamnyong",
-                    fotoKondisiUri = "",
-                    estimasiBiaya = 150000,
-                    statusPenanganan = "Menunggu Montir",
-                    tanggalWaktu = "17 Nov 2026"
-                )
-            )
-        }
     }
 
     private fun loadUserDataToViews() {
